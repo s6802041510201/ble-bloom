@@ -34,6 +34,9 @@ type NativeBleManager = {
   ) => void;
   stopDeviceScan: () => void;
   connectToDevice: (deviceId: string, options: { autoConnect: boolean }) => Promise<BleDevice>;
+  discoverAllServicesAndCharacteristicsForDevice: (
+    deviceId: string,
+  ) => Promise<BleDevice>;
   readCharacteristicForDevice: (
     deviceId: string,
     serviceUUID: string,
@@ -183,7 +186,9 @@ export async function connectAndDiscover(deviceId: string): Promise<BleDevice> {
   }
 
   const connected = await manager.connectToDevice(deviceId, { autoConnect: false });
-  return connected;
+  // A successful connection does not populate the GATT service cache. Discover
+  // services and characteristics before any read/write operation.
+  return manager.discoverAllServicesAndCharacteristicsForDevice(connected.id);
 }
 
 export async function readCharacteristic(deviceId: string): Promise<string> {

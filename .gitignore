@@ -46,6 +46,7 @@ dist-check-final/
 dist-web-check/
 dist-ios-check/
 dist-preview-check/
+dist-build-check/
 tmp/
 
 # local scaffold metadata
